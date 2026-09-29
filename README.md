@@ -171,7 +171,7 @@ npx playwright install chromium
 
 `.github/workflows/pages.yml` 已配置 GitHub Pages：推送到 `master` 分支后，Actions 会使用 Node.js 22 安装锁定依赖，执行静态检查和生产构建，然后发布 `dist/`。
 
-首次启用时，在仓库的 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**。
+首次发布前，**必须先**在仓库的 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**，否则 `configure-pages` 无法找到 Pages 站点。
 
 ## 参与贡献
 
