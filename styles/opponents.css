@@ -1,0 +1,220 @@
+/* ================= 对手画像、成就 ================= */
+.face-art{display:block;width:100%;height:100%;border-radius:50%}
+/* 主页小卡：多了「成就」，排成四格 */
+
+/* ---- 成就：印章 ---- */
+.ach-seal{--sc:var(--muted);flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:7px;font-family:var(--brush);font-size:28px;line-height:1;color:var(--sc);border:1.5px dashed color-mix(in srgb,var(--muted) 60%,transparent);background:color-mix(in srgb,var(--ink) 3%,transparent);transform:rotate(-3deg)}
+.t1 .ach-seal,.t1 > .ach-seal{--sc:#9A6431}
+.t2 .ach-seal,.t2 > .ach-seal{--sc:#6F7C88}
+.t3 .ach-seal,.t3 > .ach-seal{--sc:#B8891A}
+.got .ach-seal,#achToast .ach-seal,.ach-tiers .ach-seal{border:0;color:#fff;background:linear-gradient(145deg,color-mix(in srgb,var(--sc) 78%,#fff),var(--sc) 60%,color-mix(in srgb,var(--sc) 80%,#000));box-shadow:inset 0 0 0 2px rgba(255,255,255,.28),0 2px 6px color-mix(in srgb,var(--sc) 35%,transparent)}
+.ach-seal.sm{width:22px;height:22px;font-size:13px;border-radius:4px;transform:none}
+/* 成就页 */
+body[data-view="ach"] .v-ach{display:block}
+.v-ach{max-width:980px}
+.ach-sum{display:flex;flex-wrap:wrap;align-items:center;gap:12px 28px;margin:0 0 18px;padding:16px 20px;background:var(--surface);border:1px solid var(--rule);border-radius:10px}
+.ach-bar{flex:1 1 260px;display:grid;grid-template-columns:auto auto 1fr;align-items:baseline;gap:6px 8px}
+.ach-bar b{font-family:var(--mono);font-size:30px;font-weight:600;line-height:1}
+.ach-bar span{color:var(--muted);font-family:var(--mono);font-size:14px}
+.ach-bar i{grid-column:1 / -1;height:8px;border-radius:99px;background:linear-gradient(90deg,var(--seal) var(--p),color-mix(in srgb,var(--ink) 8%,transparent) var(--p))}
+.ach-tiers{display:flex;gap:18px;flex-wrap:wrap}
+.ach-tiers span{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:13px;color:var(--muted)}
+.ach-tiers .t1 .ach-seal{--sc:#9A6431}.ach-tiers .t2 .ach-seal{--sc:#6F7C88}.ach-tiers .t3 .ach-seal{--sc:#B8891A}
+.ach-grp{margin:0 0 18px}
+.ach-grp h3{display:flex;align-items:baseline;gap:10px;margin:0 0 10px;font-size:15px;font-weight:600;letter-spacing:.14em}
+.ach-grp h3 small{color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:0;font-weight:400}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.ach-card{position:relative;display:flex;gap:14px;align-items:center;padding:12px 14px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);min-width:0}
+.ach-card:not(.got){background:transparent}
+.ach-card:not(.got) .at b{color:var(--muted)}
+.ach-card .at{display:flex;flex-direction:column;gap:2px;min-width:0}
+.ach-card .at b{font-size:14.5px;letter-spacing:.06em}
+.ach-card .at span{font-size:12.5px;line-height:1.55;color:var(--muted)}
+.ach-card .at small{font-family:var(--mono);font-size:11px;color:var(--muted);opacity:.8}
+.ach-card.got.t3{border-color:color-mix(in srgb,#B8891A 45%,var(--rule))}
+.ach-new{position:absolute;top:8px;right:9px;font-style:normal;font-size:10.5px;line-height:16px;padding:0 5px;border-radius:99px;background:var(--seal);color:var(--seal-ink)}
+.ach-card.fresh{animation:achGlow 1.6s ease-out 2}
+@keyframes achGlow{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--seal) 45%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+@media (max-width:520px){ .ach-grid{grid-template-columns:1fr} .ach-sum{padding:12px 14px} .ach-bar b{font-size:24px} }
+/* 达成提示 */
+#achToast{position:fixed;left:50%;top:14px;z-index:90;display:flex;align-items:center;gap:12px;max-width:min(92vw,380px);padding:10px 16px 10px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--rule);box-shadow:0 14px 40px rgba(0,0,0,.28);cursor:pointer;
+  transform:translate(-50%,-140%);opacity:0;transition:transform .42s cubic-bezier(.2,.9,.3,1.2),opacity .3s}
+#achToast.show{transform:translate(-50%,0);opacity:1}
+#achToast .at{display:flex;flex-direction:column;min-width:0}
+#achToast small{font-size:11px;color:var(--seal);letter-spacing:.12em}
+#achToast b{font-size:16px;letter-spacing:.08em}
+#achToast .at > span{font-size:12px;color:var(--muted);line-height:1.5}
+@media (prefers-reduced-motion:reduce){#achToast{transition:opacity .2s}.ach-card.fresh{animation:none}}
+
+/* ================= 人机对弈设置页：选对手像翻人物档案 ================= */
+.v-setup.page{max-width:1080px}
+.su-wrap{display:grid;grid-template-columns:260px minmax(0,1fr);grid-template-areas:"roster dossier" "roster opts";gap:16px 20px;align-items:start}
+.su-roster{grid-area:roster;display:flex;flex-direction:column;gap:6px}
+.su-opp{position:relative;display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:12px;padding:8px 12px 8px 8px;border:1px solid var(--rule);border-radius:12px;background:var(--surface);cursor:pointer;transition:background .15s,border-color .15s,transform .15s}
+.su-opp input{position:absolute;opacity:0;pointer-events:none}
+.su-opp:hover{border-color:color-mix(in srgb,var(--oc) 55%,var(--rule))}
+.su-face{display:block;width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 2px var(--surface),0 0 0 3px color-mix(in srgb,var(--oc) 35%,transparent)}
+.su-on{display:flex;flex-direction:column;min-width:0}
+.su-on b{font-family:var(--brush);font-weight:400;font-size:21px;line-height:1.15;letter-spacing:.04em}
+.su-on small{font-size:11.5px;color:var(--muted);letter-spacing:.1em}
+.su-rec{font-family:var(--mono);font-size:12px;color:var(--ink);white-space:nowrap}
+.su-rec i{font-style:normal;color:var(--muted);font-family:var(--sans,inherit);font-size:11px;margin:0 3px 0 1px}
+.su-rec em{font-style:normal;color:var(--muted);font-size:11px;font-family:inherit}
+.su-opp:has(input:checked){border-color:var(--oc);background:color-mix(in srgb,var(--oc) 10%,var(--surface));box-shadow:inset 3px 0 0 var(--oc)}
+.su-opp:has(input:checked) .su-face{box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--oc)}
+.su-opp:has(input:focus-visible){outline:2px solid var(--focus);outline-offset:2px}
+/* 档案 */
+.su-dossier{grid-area:dossier;position:relative;overflow:hidden;padding:18px 22px 16px;border:1px solid var(--rule);border-radius:14px;
+  background:radial-gradient(120% 90% at 0% 0%,color-mix(in srgb,var(--oc) 16%,transparent),transparent 60%),var(--surface)}
+.su-dossier::after{content:"";position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;border:1px solid color-mix(in srgb,var(--oc) 22%,transparent);pointer-events:none}
+.dz-top{display:flex;gap:22px;align-items:center}
+.dz-face{flex:none;width:120px;height:120px;border-radius:50%;box-shadow:0 0 0 4px var(--surface),0 0 0 5px color-mix(in srgb,var(--oc) 50%,transparent),0 12px 28px rgba(0,0,0,.25);animation:dzIn .4s ease-out}
+@keyframes dzIn{from{transform:scale(.9);opacity:.3}to{transform:none;opacity:1}}
+.dz-id{min-width:0}
+.dz-k{display:block;font-size:11.5px;letter-spacing:.2em;color:var(--oc);font-weight:600}
+.dz-id h3{display:flex;align-items:center;gap:10px;margin:2px 0 0;font-family:var(--brush);font-weight:400;font-size:42px;line-height:1.1;letter-spacing:.04em}
+.dz-seal{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:5px;background:var(--seal);color:#fff;font-size:18px;transform:rotate(-6deg);box-shadow:inset 0 0 0 2px rgba(255,255,255,.3)}
+.dz-title{margin:4px 0 0;color:var(--muted);font-size:13px;letter-spacing:.14em}
+.dz-motto{margin:10px 0 0;font-size:16px;line-height:1.6;color:var(--ink);letter-spacing:.04em}
+.dz-lore{margin:12px 0 0;font-size:13.5px;line-height:1.85;color:var(--ink)}
+.dz-style{margin:10px 0 0;font-size:13px;line-height:1.7;color:var(--muted)}
+.dz-style b,.dz-secret > b{display:inline-block;margin-right:8px;padding:0 7px;border-radius:4px;font-size:11.5px;letter-spacing:.14em;color:var(--oc);border:1px solid color-mix(in srgb,var(--oc) 45%,transparent);font-weight:600}
+.dz-secret{margin:12px 0 0;padding:10px 12px;border-radius:8px;border:1px dashed color-mix(in srgb,var(--oc) 40%,var(--rule));font-size:13px;line-height:1.7}
+.dz-secret.open{border-style:solid;background:color-mix(in srgb,var(--oc) 7%,transparent)}
+.dz-secret .lock{color:var(--muted)}
+.dz-secret .lock svg{width:12px;height:12px;vertical-align:-1px;margin-right:5px}
+.dz-recs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.dz-rc{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:6px 10px;border-radius:8px;background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.dz-rc small{font-size:11px;color:var(--muted);letter-spacing:.1em}
+.dz-rc b{font-family:var(--mono);font-size:15px;font-weight:600}
+.dz-rc b i{font-style:normal;font-family:inherit;font-size:11px;color:var(--muted);font-weight:400;margin:0 4px 0 1px}
+.dz-rc.none b{color:var(--muted);font-weight:400}
+.dz-meet{display:flex;gap:10px;margin-top:14px}
+.dz-meet span{width:40px;height:40px}
+/* 选项 */
+.su-opts{grid-area:opts;display:flex;flex-direction:column;gap:12px;padding:14px 20px 16px;border:1px solid var(--rule);border-radius:14px;background:var(--surface)}
+.su-opts .su-note{margin-top:6px;min-height:0}
+.su-go{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:2px;padding-top:14px;border-top:1px dashed var(--rule)}
+.su-sum{display:flex;align-items:center;gap:12px;min-width:0}
+.su-sface{flex:none;width:42px;height:42px;border-radius:50%;box-shadow:0 0 0 2px var(--surface),0 0 0 3px color-mix(in srgb,var(--ink) 15%,transparent)}
+.su-st{display:flex;flex-direction:column;min-width:0}
+.su-st b{font-size:15px;letter-spacing:.08em;font-weight:600}
+.su-st small{font-size:12px;color:var(--muted)}
+.su-st small.su-warn{color:var(--seal)}
+.su-st small.su-warn:empty{display:none}
+.su-btn{flex:none;display:inline-flex;align-items:center;gap:8px;padding:12px 22px 12px 30px;border:0;border-radius:10px;background:var(--seal);color:#fff;font-size:16px;font-weight:600;letter-spacing:.24em;cursor:pointer;
+  box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 6px 16px color-mix(in srgb,var(--seal) 32%,transparent);transition:transform .12s,box-shadow .15s,background .15s}
+.su-btn svg{width:16px;height:16px;transition:transform .15s}
+.su-btn:hover{background:color-mix(in srgb,var(--seal) 88%,#000);box-shadow:0 1px 0 rgba(255,255,255,.25) inset,0 8px 20px color-mix(in srgb,var(--seal) 40%,transparent)}
+.su-btn:hover svg{transform:translateX(3px)}
+.su-btn:active{transform:translateY(1px)}
+.su-btn:focus-visible{outline:2px solid var(--focus);outline-offset:3px}
+/* 窄屏：对手排成一行横着滑，档案放在下面 */
+@media (max-width:820px),(max-height:560px){
+  .su-wrap{grid-template-columns:minmax(0,1fr);grid-template-areas:"roster" "dossier" "opts";gap:12px}
+  .su-roster{flex-direction:row;overflow-x:auto;gap:8px;padding:4px 2px 6px;scrollbar-width:none}
+  .su-roster::-webkit-scrollbar{display:none}
+  .su-opp{flex:none;grid-template-columns:1fr;justify-items:center;gap:4px;width:74px;padding:8px 4px 7px;text-align:center}
+  .su-face{width:46px;height:46px}
+  .su-on{align-items:center}
+  .su-on b{font-size:17px}
+  .su-on small{font-size:10.5px;letter-spacing:.04em}
+  .su-rec{display:none}
+  .su-opp:has(input:checked){box-shadow:inset 0 -3px 0 var(--oc)}
+  .su-dossier{padding:16px 16px 14px}
+  .dz-top{gap:14px}
+  .dz-face{width:84px;height:84px}
+  .dz-id h3{font-size:30px}
+  .dz-seal{width:22px;height:22px;font-size:14px}
+  .dz-motto{font-size:14px;margin-top:6px}
+  .dz-lore{margin-top:12px;font-size:13px;line-height:1.75}
+  .dz-recs{gap:6px}
+  .dz-rc{padding:6px 8px}
+  .su-opts{padding:14px}
+  .su-btn{padding:11px 16px 11px 22px;letter-spacing:.14em}
+  .su-sface{width:36px;height:36px}
+  .su-go{position:sticky;bottom:0;z-index:2;margin:0 -14px -14px;padding:10px 14px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--rule);border-radius:0 0 14px 14px}
+}
+/* 画像放进原来的圆标里 */
+.vs .om:has(svg),.vs .om:has(img),.opp .om.pf,.intro-mark.pf{border-radius:50%;padding:0;overflow:hidden;background:none!important;box-shadow:0 0 0 2px var(--surface),0 0 0 3px color-mix(in srgb,var(--ink) 18%,transparent)}
+.intro-mark.pf{width:88px;height:88px;margin-bottom:8px;box-shadow:0 0 0 3px var(--surface),0 8px 22px rgba(0,0,0,.3)}
+.intro-q{display:block;max-width:240px;margin-top:6px;font-size:13.5px;color:var(--ink);letter-spacing:.04em;text-align:center;quotes:"「" "」"}
+.res-q{display:flex;align-items:center;gap:10px;margin:10px auto 0;max-width:300px;padding:8px 12px;border-radius:10px;background:color-mix(in srgb,var(--ink) 5%,transparent);font-size:13px;line-height:1.55;text-align:left}
+.res-q .rq-face{flex:none;width:34px;height:34px}
+.res-q b{margin-right:4px;font-weight:600}
+.heat th.o span.oface{width:20px;height:20px;background:none;vertical-align:-5px}
+
+/* 档案精简后：随机的小头像排在名字下面 */
+.dz-id .dz-meet{margin-top:10px;gap:6px}
+.dz-id .dz-meet span{width:30px;height:30px}
+
+/* 画好的画像 */
+.face-img{object-fit:cover;background:color-mix(in srgb,var(--oc,#8a8a8a) 30%,var(--surface));-webkit-user-drag:none;user-select:none}
+/* 立绘：头顶探出卡片上沿，下半身在卡片底边处淡出，有点「站出来」的立体感 */
+.su-dossier.has-full{overflow:visible;z-index:1;min-height:210px;display:flex;flex-direction:column;justify-content:center}
+.su-dossier.has-full::after{display:none}
+.dz-full{position:absolute;right:36px;top:-46px;bottom:0;width:230px;overflow:hidden;pointer-events:none;user-select:none;border-radius:0 0 14px 14px;
+  -webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent 99%);mask-image:linear-gradient(to bottom,#000 72%,transparent 99%)}
+.dz-full img{display:block;width:100%;height:auto;filter:drop-shadow(0 8px 12px rgba(0,0,0,.16)) drop-shadow(0 1px 1px rgba(0,0,0,.08));animation:dzFull .5s ease-out}
+@keyframes dzFull{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.su-dossier.has-full .dz-top,.su-dossier.has-full .dz-style{position:relative;z-index:1;padding-right:230px}
+.su-dossier.has-full .dz-face{display:none}
+@media (max-width:620px){
+  .su-dossier.has-full{min-height:0}
+  .dz-full{right:-2px;top:-16px;width:150px;
+    -webkit-mask-image:linear-gradient(to bottom,#000 50%,transparent 84%),linear-gradient(to right,transparent,#000 22%);-webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to bottom,#000 50%,transparent 84%),linear-gradient(to right,transparent,#000 22%);mask-composite:intersect}
+  .su-dossier.has-full .dz-top{padding-right:112px;min-height:150px}
+  .su-dossier.has-full .dz-style{padding-right:0}
+}
+/* 底部只写「对阵 某某」，不再重复头像 */
+.su-sface{display:none!important}
+@media (prefers-reduced-motion:reduce){.dz-full img{animation:none}}
+/* 隐藏禁手点开关 */
+.hf-tg{flex-wrap:wrap;margin-top:10px;font-size:13px;line-height:1.4}
+.hf-tg small{flex-basis:100%;padding-left:24px;margin-top:-2px;font-size:11.5px;color:var(--muted)}
+.hf-tg.off{opacity:.45;pointer-events:none}
+/* 设置页顶上的模式切换；双人对弈只有设置区 */
+.su-mode{margin:-4px 0 14px;max-width:320px}
+.su-mode .segm{display:flex}
+.su-mode .segm-i{flex:1;padding:8px 4px}
+.su-pvp{position:relative;display:block;width:100%;height:100%}
+.su-pvp i{position:absolute;top:18%;width:64%;height:64%;border-radius:50%;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.su-pvp i.b{left:0;background:radial-gradient(circle at 34% 28%,#6d6f6d,#232423 42%,#0a0a0a)}
+.su-pvp i.w{right:0;background:radial-gradient(circle at 34% 28%,#fff,#ecebe4 55%,#c9c7bc)}
+.su-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:-4px 0 14px}
+.su-top .su-mode{margin:0;flex:1 1 240px}
+.su-back{display:inline-flex;align-items:center;gap:6px}
+.su-back .ic{width:16px;height:16px}
+/* 设置区各节之间用虚线隔开 */
+.su-opts > .su-sec + .su-sec{padding-top:14px;border-top:1px dashed var(--rule)}
+@media (max-width:820px){
+  .su-top{flex-wrap:nowrap;gap:8px}
+  .su-top .su-mode{flex:1 1 auto;min-width:0}
+  .su-back{flex:none;padding:8px 10px;font-size:13px}
+}
+/* 双人对弈：左栏双人战绩，右上说明，右下规则（与人机对弈同一套格子） */
+.pv-side{gap:8px;padding:14px;border:1px solid var(--rule);border-radius:14px;background:var(--surface)}
+.pv-h{margin:4px 0 0;font-size:12px;letter-spacing:.14em;color:var(--muted);font-weight:600}
+.pv-h:first-child{margin-top:0}
+.pv-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.pv-tile{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:10px;background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.pv-tile small{font-size:11px;color:var(--muted);letter-spacing:.06em}
+.pv-tile b{font-family:var(--mono);font-size:20px;font-weight:600}
+.pv-run{margin:0;font-size:12.5px;color:var(--seal)}
+.pv-g{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:10px;padding:6px;border:1px solid var(--rule);border-radius:10px;background:var(--ground);text-align:left}
+.pv-g .mini{width:48px;height:48px}
+.pv-g span{display:flex;flex-direction:column;min-width:0}
+.pv-g b{font-size:13.5px;font-weight:600}
+.pv-g small{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pv-g:hover{border-color:color-mix(in srgb,var(--ink) 35%,var(--rule))}
+.pv-none{margin:0;font-size:12.5px;line-height:1.65;color:var(--muted)}
+.pv-face{position:relative;display:block;background:radial-gradient(circle at 50% 40%,#E7C589,#CFA25E)}
+.pv-face i{position:absolute;top:32%;width:46%;height:46%;border-radius:50%;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.pv-face i.b{left:12%;background:radial-gradient(circle at 34% 28%,#6d6f6d,#232423 42%,#0a0a0a)}
+.pv-face i.w{right:12%;background:radial-gradient(circle at 34% 28%,#fff,#f1f0e8 50%,#cfcec4)}
+@media (max-width:820px),(max-height:560px){
+  .pv-side{flex-direction:column;overflow:visible;padding:12px}
+  .pv-g{display:none}
+  .pv-rech,.pv-none{display:none}
+}

@@ -1,0 +1,90 @@
+/* ================= 设计系统 =================
+   颜色沿用 base.css 的几样（纸色 ground、卡片 surface、墨 ink、灰 muted、线 rule、朱印 seal），这里补上
+   圆角、阴影、字号、动效，以及按钮、卡片、标签、统计数字这些各页通用的样子。
+   新写的页面只用这里的变量和类；老样式慢慢往这里收。 */
+:root{
+  --surface-2:#FAFBF8;          /* 抬起来的一层：浮层、选中的卡片 */
+  --rule-2:#DCE2DB;             /* 更淡的分隔线 */
+  --ink-2:#39413C;              /* 次一级的正文 */
+  --r-1:6px;--r-2:10px;--r-3:14px;--r-4:20px;
+  --sh-1:0 1px 2px rgba(22,28,24,.06),0 1px 1px rgba(22,28,24,.03);
+  --sh-2:0 6px 18px rgba(22,28,24,.07),0 1px 3px rgba(22,28,24,.05);
+  --sh-3:0 20px 48px rgba(22,28,24,.18),0 4px 12px rgba(22,28,24,.07);
+  --ease:cubic-bezier(.3,.9,.3,1);
+  --fs-xs:11.5px;--fs-s:12.5px;--fs-m:14px;--fs-l:16px;--fs-xl:20px;--fs-2xl:28px;
+  --nav-w:220px;--rail-w:72px;--top-h:52px;--tab-h:58px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--surface-2:#20251F;--rule-2:#252B27;--ink-2:#C9CFC8;
+    --sh-1:0 1px 2px rgba(0,0,0,.3);--sh-2:0 6px 18px rgba(0,0,0,.35);--sh-3:0 20px 48px rgba(0,0,0,.55)}
+}
+:root[data-theme="dark"]{--surface-2:#20251F;--rule-2:#252B27;--ink-2:#C9CFC8;
+  --sh-1:0 1px 2px rgba(0,0,0,.3);--sh-2:0 6px 18px rgba(0,0,0,.35);--sh-3:0 20px 48px rgba(0,0,0,.55)}
+
+/* ---- 按钮：默认是描边的；primary 墨色、accent 朱红（每页最多一个）、ghost 无边框 ---- */
+button,.btn{border-radius:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;font:inherit;font-size:var(--fs-m);color:var(--ink);text-decoration:none;
+  background:var(--surface);border:1px solid var(--rule);cursor:pointer;transition:background .15s,border-color .15s,box-shadow .15s,transform .15s}
+.btn:hover:not(:disabled){border-color:var(--ink)}
+button.accent,.btn.accent{background:var(--seal);border-color:var(--seal);color:var(--seal-ink);box-shadow:0 6px 16px -6px color-mix(in srgb,var(--seal) 70%,transparent)}
+button.accent:hover:not(:disabled),.btn.accent:hover:not(:disabled){border-color:var(--seal);background:color-mix(in srgb,var(--seal) 88%,#000);transform:translateY(-1px)}
+button.ghost,.btn.ghost{background:none;border-color:transparent;color:var(--muted)}
+button.ghost:hover:not(:disabled),.btn.ghost:hover:not(:disabled){color:var(--ink);background:color-mix(in srgb,var(--ink) 6%,transparent);border-color:transparent}
+.btn.lg{padding:12px 22px;font-size:var(--fs-l);letter-spacing:.08em;border-radius:10px}
+.btn.sm{padding:5px 10px;font-size:var(--fs-s)}
+.btn svg,.ic{width:18px;height:18px;flex:none;stroke-width:1.8}
+.btn.sm svg{width:15px;height:15px}
+
+/* ---- 卡片、小标题、标签、统计数字 ---- */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-3);box-shadow:var(--sh-1)}
+.card.pad{padding:18px 20px}
+a.card,button.card{display:block;width:100%;text-align:left;color:inherit;text-decoration:none;cursor:pointer;transition:transform .16s var(--ease),box-shadow .16s,border-color .16s}
+a.card:hover,button.card:hover:not(:disabled){transform:translateY(-2px);box-shadow:var(--sh-2);border-color:color-mix(in srgb,var(--ink) 40%,var(--rule))}
+.eyebrow{margin:0;font-size:var(--fs-xs);letter-spacing:.18em;color:var(--muted)}
+.sec-h{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;margin:0 0 10px}
+.sec-h h3{margin:0;font-size:var(--fs-m);font-weight:600;letter-spacing:.12em;white-space:nowrap}
+.sec-h small,.sec-h a{font-size:var(--fs-s);color:var(--muted)}
+.sec-h a{text-decoration:none}
+.sec-h a:hover{color:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:1px 9px;border-radius:999px;font-size:var(--fs-xs);line-height:1.7;letter-spacing:.04em;border:1px solid var(--rule);color:var(--muted);background:var(--surface);white-space:nowrap}
+.chip.accent{border-color:color-mix(in srgb,var(--seal) 40%,transparent);color:var(--seal);background:var(--seal-soft)}
+.chip.ink{border-color:var(--ink);background:var(--ink);color:var(--ground)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600}
+.stat{display:flex;flex-direction:column;gap:2px;min-width:0}
+.stat b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:22px;font-weight:600;line-height:1.2;color:var(--ink)}
+.stat small{font-size:var(--fs-xs);color:var(--muted);letter-spacing:.06em}
+.dotnew{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--seal);box-shadow:0 0 0 2px var(--surface)}
+.bar{position:relative;height:6px;border-radius:999px;background:color-mix(in srgb,var(--ink) 8%,transparent);overflow:hidden}
+.bar > i{position:absolute;inset:0 auto 0 0;width:var(--p,0%);border-radius:inherit;background:var(--c,var(--ink));transition:width .5s var(--ease)}
+
+/* ---- 页头（电脑端）：毛笔字标题 + 一句说明 + 右边的操作 ---- */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 22px}
+.ph h2{margin:0;font-family:var(--brush);font-weight:400;font-size:40px;line-height:1;letter-spacing:.02em}
+.ph p{margin:8px 0 0;color:var(--muted);font-size:var(--fs-s);letter-spacing:.04em}
+.ph-acts{flex:none;display:flex;gap:8px;align-items:center;white-space:nowrap}
+
+/* ---- 空状态：一小块棋盘画、一句话、一个去处 ---- */
+.empty{display:flex;flex-direction:column;align-items:center;gap:10px;padding:40px 20px;text-align:center;color:var(--muted)}
+.empty svg.art{width:120px;height:auto;opacity:.9}
+.empty b{color:var(--ink);font-size:var(--fs-l);letter-spacing:.08em}
+.empty p{margin:0;max-width:30em;font-size:var(--fs-s);line-height:1.7}
+
+/* ---- 头像：圆形，画像或者印章 ---- */
+.avatar{display:inline-block;flex:none;width:var(--s,40px);height:var(--s,40px);border-radius:50%;overflow:hidden;background:var(--rule);box-shadow:0 0 0 2px var(--surface),0 1px 3px rgba(0,0,0,.18)}
+.avatar > svg,.avatar > img{display:block;width:100%;height:100%;object-fit:cover}
+
+/* ---- 开关（Toggle.vue）：一整行，左边说明，右边开关 ---- */
+.tg-row{display:flex;align-items:center;gap:12px;cursor:pointer}
+.tg-row.off{opacity:.5;cursor:default}
+.tg-t{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.4}
+.tg-t b{font-size:13.5px;font-weight:500}
+.tg-t small{font-size:var(--fs-xs);color:var(--muted)}
+.tg-sw{flex:none;position:relative;width:38px;height:22px;padding:0;border:0;border-radius:999px;background:color-mix(in srgb,var(--ink) 18%,transparent);transition:background .2s}
+.tg-sw[data-state="checked"]{background:var(--ink)}
+.tg-sw:hover:not(:disabled){border-color:transparent}
+.tg-th{display:block;width:18px;height:18px;margin-left:2px;border-radius:50%;background:var(--surface-2);box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .2s var(--ease)}
+.tg-th[data-state="checked"]{transform:translateX(16px)}
+
+@media (prefers-reduced-motion:reduce){.tg-th,.btn,a.card,button.card,.bar > i{transition:none}}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}

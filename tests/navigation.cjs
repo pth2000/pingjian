@@ -1,0 +1,31 @@
+const { chromium } = require('playwright');
+const BASE = process.env.BASE_URL || 'http://localhost:4173/';
+(async () => {
+  const b = await chromium.launch(); const errs = [];
+  const ctx = await b.newContext({ viewport: { width: 1400, height: 860 } });
+  await ctx.addInitScript(() => { if (!localStorage.getItem('gomoku-profiles')) localStorage.setItem('gomoku-profiles', JSON.stringify({ list: [{ id: 'ptest', name: '测试员', t: Date.now() }], cur: 'ptest' })); });
+  const p = await ctx.newPage(); p.on('pageerror', e => errs.push(e.message));
+  await p.goto(BASE); await p.waitForTimeout(600);
+  await p.click('#tabGame'); await p.waitForTimeout(200); console.log('1', await p.evaluate(() => VIEW));
+  await p.click('#suStart'); await p.waitForTimeout(400); console.log('2', await p.evaluate(() => VIEW));
+  await p.click('#tabHome'); await p.click('#tabGame'); await p.waitForTimeout(200); console.log('3 fresh game kept', await p.evaluate(() => VIEW));
+  await p.evaluate(() => { [112, 113, 97, 98, 82, 83, 67, 68, 52].forEach((m, k) => { place(m, k % 2 ? 2 : 1); S.moves.push(m); }); S.over = true; S.winner = 1; finishGame(); });
+  await p.waitForTimeout(1500);
+  await p.click('#tabHome'); await p.waitForTimeout(200); await p.click('#tabGame'); await p.waitForTimeout(200); console.log('4 after finish', await p.evaluate(() => VIEW));
+  await p.evaluate(() => openPuzzles()); await p.waitForTimeout(300); await p.screenshot({ path: 'nav_pz.png', clip: { x: 0, y: 0, width: 1400, height: 120 } });
+  await p.click('#tabHome'); await p.waitForTimeout(200); console.log('5 back', await p.evaluate(() => VIEW));
+  // 路由：地址跟着页面走；浏览器后退、直接打开地址都能到对的页
+  const ok = (c, m) => { if (!c) { console.log('FAIL', m); process.exitCode = 1; } else console.log('ok', m); };
+  await p.evaluate(() => showView('records')); await p.waitForTimeout(300);
+  ok(p.url().endsWith('#/records'), '地址跟着页面走 ' + p.url());
+  await p.evaluate(() => showView('ach')); await p.waitForTimeout(300);
+  await p.goBack(); await p.waitForTimeout(400);
+  ok(await p.evaluate(() => VIEW === 'records' && !!document.querySelector('.v-records')), '后退回到战绩');
+  await p.goto(BASE + '#/shafa'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => VIEW === 'shafa' && PZ.opened), '直接打开 #/shafa：杀法页，题目已打开');
+  await p.goto(BASE + '#/notes'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => VIEW === 'notes' && document.body.dataset.view === 'notes'), '直接打开 #/notes');
+  await p.goto(BASE + '#/nope'); await p.waitForTimeout(900);
+  ok(await p.evaluate(() => VIEW === 'home'), '不认识的地址回主页');
+  console.log(errs); await b.close(); if (errs.length) process.exitCode = 1;
+})();

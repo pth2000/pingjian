@@ -1,0 +1,157 @@
+/* ================= 各页通用、战绩、棋谱、我的 =================
+   放在各页老样式后面，统一宽度、页头，覆盖掉过去的细节。 */
+.page{max-width:1080px}
+.v-rules.page{max-width:1080px}
+/* 规则页（宽屏）：正文一栏，目录竖着钉在右边，读到哪都能跳 */
+@media (min-width:1100px) and (min-height:561px){
+  body[data-view="rules"] .v-rules.page{display:grid;grid-template-columns:minmax(0,1fr) 168px;column-gap:28px;align-items:start}
+  .v-rules > .ph{grid-column:1 / -1}
+  .v-rules > #rulesSlot{grid-column:1;min-width:0}
+  .v-rules > .r-toc{grid-column:2;grid-row:2 / span 20;position:sticky;top:24px;flex-direction:column;flex-wrap:nowrap;gap:2px;margin:0;padding:10px 0 10px 14px;border-left:1px solid var(--rule)}
+  .v-rules > .r-toc button{padding:6px 10px;border:0;border-radius:8px;background:none;text-align:left;font-size:13px;color:var(--muted)}
+  .v-rules > .r-toc button:hover{color:var(--ink);background:color-mix(in srgb,var(--ink) 5%,transparent)}
+  .v-rules > .r-toc button.on{color:var(--ink);font-weight:600;background:color-mix(in srgb,var(--ink) 6%,transparent)}
+}
+.ph-t{min-width:0}
+.ph-back{margin:0 0 8px -10px}
+
+/* ---- 分段选择（Segmented.vue） ---- */
+.segm{display:inline-flex;padding:3px;border-radius:10px;background:color-mix(in srgb,var(--ink) 6%,transparent)}
+.segm-i{padding:6px 16px;border:0;border-radius:8px;background:none;font-size:13px;letter-spacing:.1em;color:var(--muted)}
+.segm-i:hover:not(:disabled){color:var(--ink);border-color:transparent}
+.segm-i[data-state="on"]{background:var(--surface-2);color:var(--ink);font-weight:600;box-shadow:var(--sh-1)}
+
+/* ---- 空状态 ---- */
+.empty.card{padding:48px 20px}
+.empty .btn{margin-top:8px}
+
+/* ---- 战绩 ---- */
+.rc-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.rc-kpis .stat{padding:14px 16px}
+.rc-sec{margin-bottom:16px}
+.v-records .recent{gap:5px}
+.v-records .recent{gap:5px}
+/* 近期胜负：每一格都是按钮，点开那一盘复盘 */
+.v-records .recent button{display:grid;place-items:center;width:28px;height:28px;padding:0;border:0;border-radius:6px;font-family:var(--brush);font-size:15px;color:#fff;background:var(--muted);cursor:pointer;transition:transform .12s var(--ease),box-shadow .12s}
+.v-records .recent button:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 10px -2px rgba(0,0,0,.3);border-color:transparent}
+.v-records .recent button:disabled{opacity:.55;cursor:default}
+.v-records .recent button.w{background:var(--seal)}
+.v-records .recent button.l{background:var(--ink);color:var(--ground)}
+.v-records .recent button.d{background:var(--muted)}
+.v-records .heat{border-spacing:5px;font-size:13px}
+.v-records .heat th.o{width:110px;font-size:14px;letter-spacing:.06em}
+.v-records .heat th.o .avatar{margin-right:8px;vertical-align:-7px}
+.v-records .heat td{padding:11px 0;border-radius:8px}
+.v-records .heat td.go{padding:0}
+.v-records .heat td button{display:block;width:100%;padding:11px 0;border:0;border-radius:8px;background:none;font:inherit;color:inherit;cursor:pointer}
+.v-records .heat td button:hover{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--ink) 45%,transparent);border-color:transparent}
+.gm-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px}
+.gm-lv{gap:6px;padding:2px 10px;cursor:pointer;font-size:12px}
+.gm-lv span{opacity:.7}
+.rc-gh{display:flex;align-items:center;gap:10px;margin:6px 0 10px;font-size:var(--fs-m);font-weight:600;letter-spacing:.14em;color:var(--ink-2)}
+.rc-gh::after{content:"";flex:1;height:1px;background:var(--rule)}
+.rc-gh:not(:first-of-type){margin-top:26px}
+.rc-none{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;font-size:var(--fs-s);color:var(--muted)}
+.rc-none .btn{flex:none}
+.rc-rules{display:flex;flex-direction:column;gap:10px}
+.rc-rule{display:grid;grid-template-columns:minmax(0,11em) minmax(0,1fr) 3.2em minmax(0,12em);align-items:center;gap:12px;font-size:var(--fs-s)}
+.rc-rule b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rc-rule em{font-style:normal;font-family:var(--mono);font-weight:600;text-align:right}
+.rc-rule small{color:var(--muted);font-size:var(--fs-xs);white-space:nowrap}
+@media (max-width:560px){ .rc-rule{grid-template-columns:minmax(0,1fr) 3em;row-gap:4px} .rc-rule .bar{grid-column:1 / -1;grid-row:2} .rc-rule small{grid-column:1 / -1;grid-row:3} }
+/* 双人对弈的近期结果：黑胜是黑子、白胜是白子、和是灰 */
+.v-records .recent button.pb{background:var(--ink);color:var(--ground)}
+.v-records .recent button.pwh{background:var(--surface-2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--stone-edge,var(--rule))}
+.v-records .recent button.pd{background:var(--muted)}
+.rc-foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-top:14px;font-size:var(--fs-s);color:var(--muted)}
+.rc-foot .btn{margin-left:auto;margin-right:-10px}
+
+/* ---- 棋谱 ---- */
+.v-games .games{grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.v-games .games button.gcard{grid-template-columns:96px minmax(0,1fr);gap:14px;padding:12px;border-radius:var(--r-3);background:var(--surface)}
+.gcard .mini{width:96px;height:96px}
+.gcard .gi b{font-size:15px}
+#gamesMore{display:flex;margin:18px auto 0}
+
+/* ---- 我的：去处（手机上才有）、外观 ---- */
+.pf-go{display:none}
+.pf-goi{position:relative;display:flex!important;flex-direction:column;align-items:center;gap:6px;padding:14px 6px 12px!important;font-size:13px;letter-spacing:.12em}
+.pf-goi .ic{width:22px;height:22px;color:var(--ink-2)}
+.pf-goi .dotnew{position:absolute;top:8px;right:10px}
+
+@media (max-width:820px),(max-height:560px){
+  .ph{margin:14px 0 14px;align-items:center}
+  .ph h2,.ph-back{display:none}
+  .ph p{margin:0}
+  .ph:not(:has(p)):not(:has(.ph-acts)){display:none}
+  .rc-kpis{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .rc-kpis .stat{padding:10px 12px}
+  .rc-kpis .stat b{font-size:18px}
+  .v-records .heat{border-spacing:3px}
+  .v-records .heat th.o{width:60px;font-size:12.5px}
+  .v-records .heat th.o .avatar{display:none}
+  .v-records .heat td{padding:8px 0;font-size:11.5px}
+  .v-records .heat td.go{padding:0} .v-records .heat td button{padding:8px 0}
+  .v-games .games{grid-template-columns:minmax(0,1fr)}
+  .pf-go{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 22px}
+  .pf-go:has(> :nth-child(4):last-child){grid-template-columns:repeat(4,minmax(0,1fr))}
+  .segm{display:flex}
+  .segm-i{flex:1;padding:8px 4px}
+}
+/* 人机设置页：手机上「开始对局」一行贴在底部页签上面 */
+@media (max-width:820px),(max-height:560px){
+  .su-go{bottom:calc(var(--tab-h) + var(--safe-b))!important;padding-bottom:12px!important;box-shadow:0 -6px 16px -8px rgba(0,0,0,.2)}
+}
+/* 人机设置页：分段选择撑满，开关一行 */
+.su-sec .segm{display:flex}
+.su-sec .segm-i{flex:1;padding:9px 4px}
+#suHideForbRow{margin-top:10px}
+
+/* ================= 札记、我的：和战绩、成就同一套卡片 =================
+   宽度、圆角、投影、统计数字都跟 system.css 走；人物页的立绘收进卡片里，手机上不压字 */
+.nt-sum span,.nt-c,.np-hero,.np-box,.pf-card,.pf-bond,.pf-row{border-radius:var(--r-3);box-shadow:var(--sh-1)}
+.nt-c.unk{box-shadow:none}
+.nt-sum span{padding:14px 16px;border-color:var(--rule);background:var(--surface)}
+.nt-sum b{font-size:22px}
+.nt-sum small{font-size:var(--fs-xs);letter-spacing:.06em}
+.pf-sec,.nt-sec{margin-top:24px}
+.pf-sec h4,.nt-sec h4{font-size:var(--fs-m);letter-spacing:.12em}
+/* 人物页：立绘在卡片右边，不再伸出卡片顶上 */
+.np-hero{overflow:hidden;min-height:230px}
+.np-hero.has-full{padding-right:260px}
+.np-full{top:10px;right:24px;width:230px;border-radius:0}
+.np-play{margin-top:14px}
+@media (max-width:620px){
+  .np-hero{min-height:0;padding:16px}
+  .np-hero.has-full{padding-right:16px}
+  .np-hero.has-full .np-id{padding-right:96px}
+  .np-full{top:6px;right:-6px;width:118px}
+  .np-bond{flex-wrap:wrap;gap:6px 10px}
+  .np-bb{flex-basis:100%}
+  .np-id h3{font-size:34px}
+  .np-motto{font-size:14px}
+  /* 札记总览：手机上一行一位，名字和进度都放得下 */
+  .nt-cast{grid-template-columns:minmax(0,1fr);gap:10px}
+  .nt-c{grid-template-columns:48px 1fr;padding:14px 16px}
+  .nt-cf{width:48px;height:48px}
+  .nt-c b{font-size:21px}
+  .nt-c > small{font-size:12px}
+  .nt-cp small{font-size:11.5px}
+  .nt-c.has-full{padding-right:108px;min-height:112px}
+  .nt-cfull{width:100px;right:4px}
+  .pf-sec,.nt-sec{margin-top:20px}
+}
+/* 规则选择（RulePicker.vue）：类别分段 + 组内单选列表 */
+.rp{display:flex;flex-direction:column;gap:8px}
+.rp .segm{display:flex}
+.rp .segm-i{flex:1;padding:8px 4px}
+.rp-gnote{margin:0;font-size:12px;color:var(--muted)}
+.rp-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.rp-i{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--ground);text-align:left}
+.rp-dot{grid-row:1 / 3;width:14px;height:14px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--ink) 35%,transparent);background:var(--surface)}
+.rp-i b{font-size:13.5px;font-weight:600;letter-spacing:.03em}
+.rp-i small{grid-column:2;font-size:11.5px;color:var(--muted)}
+.rp-i[data-state="on"]{border-color:var(--ink);background:var(--surface-2)}
+.rp-i[data-state="on"] .rp-dot{border-color:var(--ink);background:radial-gradient(circle,var(--ink) 0 40%,var(--surface) 45%)}
+.rp-desc{margin:2px 0 0;padding:8px 10px;border-left:2px solid color-mix(in srgb,var(--seal) 55%,transparent);background:color-mix(in srgb,var(--ink) 3%,transparent);border-radius:0 8px 8px 0;font-size:12.5px;line-height:1.65;color:var(--ink)}
+@media (max-width:520px){.rp-list{grid-template-columns:1fr}}

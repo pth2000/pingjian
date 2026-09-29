@@ -1,0 +1,84 @@
+/* ================= 杀法练习 ================= */
+.pz-t{display:inline-grid;place-items:center;width:34px;height:34px;padding:0;border-radius:8px;font-family:var(--mono);font-size:13px;font-weight:600;background:var(--surface);flex:none}
+.pz-t.done{border-color:var(--seal);color:var(--seal)}
+.pz-t.perfect{background:var(--seal);border-color:var(--seal);color:var(--seal-ink)}
+.pz-t.seen{border-style:dashed;color:var(--muted)}
+.pz-t.on{background:var(--ink);border-color:var(--ink);color:var(--ground);box-shadow:0 0 0 2px var(--ground),0 0 0 3.5px var(--ink)}
+.pz-list .pz-prog{flex:none;display:flex;align-items:baseline;gap:4px;font-size:12.5px;color:var(--muted);white-space:nowrap}
+.pz-list .pz-prog b{font-family:var(--mono);font-size:18px;color:var(--ink)}
+.pz-list .pz-prog small{margin-left:8px;font-size:11.5px}
+/* 题目列表：手机上横排（只露进度和题号），电脑上竖成左边一列 */
+.ds-page .pz-list{flex-direction:row;align-items:center;gap:16px}
+.ds-page .pz-list .bs-grp{gap:5px}
+.ds-page .pz-list .bs-k{width:auto}
+.ds-page .pz-list .pz-prog small{display:none}
+.ds-page .pz-legend{display:none}
+@media (min-width:821px) and (min-height:561px){
+  .ds-page .pz-list{flex-direction:column;flex-wrap:nowrap;gap:12px}
+  .ds-page .pz-list .pz-prog{justify-content:center;padding-bottom:10px;border-bottom:1px solid var(--rule)}
+  .ds-page .pz-list .pz-prog small{display:inline}
+  .ds-page .pz-list .bs-grp{width:100%;flex-direction:row;flex-wrap:wrap;gap:6px}
+  .ds-page .pz-list .bs-k{width:100%;border:0;padding:0;margin:0;text-align:left;font-weight:600}
+  .ds-page .pz-list .pz-t{width:38px;height:38px}
+  .ds-page .pz-legend{display:flex;flex-direction:column;gap:6px;margin-top:auto}
+}
+.pz-legend .pz-t{width:14px;height:14px;border:1.5px solid var(--rule);border-radius:4px;vertical-align:-2px}
+.pz-legend .pz-t.done{border-color:var(--seal)}
+.pz-goal{margin:0;color:var(--muted);font-size:12.5px;line-height:1.7}
+.pz-goal b{color:var(--ink)}
+.pz-badge{font-style:normal;font-size:11px;padding:0 7px;border-radius:999px;border:1px solid var(--seal);color:var(--seal)}
+.pz-badge.perfect{background:var(--seal);color:var(--seal-ink)}
+.pz-badge.seen{border-color:var(--rule);color:var(--muted);border-style:dashed}
+.pz-msg{padding:8px 11px;border-radius:8px;border-left:3px solid var(--rule);background:var(--ground);font-size:13px;line-height:1.65}
+.pz-msg.ok{border-left-color:var(--focus)}
+.pz-msg.hint{border-left-color:var(--focus);background:color-mix(in srgb,var(--focus) 10%,var(--ground))}
+.pz-msg.bad{border-left-color:var(--seal);background:var(--seal-soft)}
+.pz-msg.wait{color:var(--muted)}
+.pz-msg.win{border-left-color:var(--seal);background:var(--seal-soft);font-size:13.5px}
+.pz-msg.win b{color:var(--seal);font-size:16px;margin-right:4px}
+.bk-ov .pz-hint circle{fill:rgba(31,111,92,.92);stroke:rgba(255,255,255,.6);stroke-width:.03}
+.bk-ov .pz-hint .pulse{stroke:#1F6F5C;stroke-width:.06}
+.bk-ov .pz-hint .pulse{fill:none;transform-box:fill-box;transform-origin:center;animation:pzPulse 1.3s ease-out infinite}
+@keyframes pzPulse{from{transform:scale(1);opacity:.9}to{transform:scale(1.7);opacity:0}}
+.bk-ov .pz-bad circle{fill:rgba(198,47,36,.16);stroke:#C62F24;stroke-width:.06}
+.bk-ov .pz-bad path{stroke:#C62F24;stroke-width:.08;stroke-linecap:round}
+@media (prefers-reduced-motion:reduce){.bk-ov .pz-hint .pulse{animation:none}}
+.pz-go ~ *,.bk-rec .bk-seq button[tabindex="-1"]{pointer-events:none}
+.ds-page .pz-list .pz-legend .pz-t{width:14px;height:14px;border-radius:4px}
+/* ================= 定式练习 ================= */
+.pr-box{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 10px;padding:8px 11px;border-radius:8px;background:var(--ink);color:var(--ground);font-size:12.5px}
+.pr-box b{font-size:13.5px;letter-spacing:.06em}
+.pr-box em{font-style:normal;font-family:var(--mono);font-weight:600}
+.pr-decide{display:flex;gap:8px}
+.pr-decide button{flex:1;padding:8px 6px;font-size:13px}
+.pz-msg.info{border-left-color:var(--rule)}
+.bk-seq.ro button{pointer-events:none}
+.bk-seq .pre{opacity:.6}
+.pr-nav .pos{flex:2.2}
+.pr-nav #prHint{flex:1.2;font-size:13px}
+
+/* 手顺的颜色图例：红=定式，蓝=AI 开局库，绿=引擎 */
+.bk-lg{display:inline-flex;flex-wrap:wrap;justify-content:flex-end;gap:2px 10px;align-items:center}
+.bk-lg i{display:inline-block;width:3px;height:.95em;margin-right:4px;vertical-align:-.12em;border-radius:1px;background:var(--muted)}
+.bk-lg i.book{background:var(--seal)} .bk-lg i.ai{background:#2563A0} .bk-lg i.engine{background:var(--focus)}
+
+/* ---- 杀法：解开时更醒目 ---- */
+.bk-ov .pz-win line{stroke:var(--seal);stroke-width:.16;stroke-linecap:round;opacity:.9;stroke-dasharray:6;stroke-dashoffset:6;animation:pzLine .5s .1s ease-out forwards}
+.bk-ov .pz-win.seen line{stroke:#6A655C;opacity:.7}
+@keyframes pzLine{to{stroke-dashoffset:0}}
+.bk-ov .pz-winx circle{fill:rgba(198,47,36,.16);stroke:#C62F24;stroke-width:.06}
+.bk-ov .pz-winx path{stroke:#C62F24;stroke-width:.08;stroke-linecap:round}
+.pz-stamp{position:absolute;left:50%;top:50%;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:30%;aspect-ratio:1;border:5px solid var(--seal);border-radius:12%;
+  color:var(--seal);background:color-mix(in srgb,#FFF8EC 72%,transparent);box-shadow:0 10px 30px rgba(120,20,10,.25),inset 0 0 0 3px color-mix(in srgb,var(--seal) 25%,transparent);
+  pointer-events:none;transform:translate(-50%,-50%) rotate(-8deg);animation:pzStamp 2.6s cubic-bezier(.2,1.1,.3,1) forwards}
+.pz-stamp b{font-family:var(--brush);font-weight:400;font-size:clamp(44px,12cqw,110px);line-height:1}
+.pz-stamp small{font-size:clamp(11px,2.4cqw,15px);letter-spacing:.3em;font-weight:600}
+.pz-stamp.perfect{background:color-mix(in srgb,#FFF1DE 78%,transparent)}
+@keyframes pzStamp{0%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scale(1.9)}14%{opacity:1;transform:translate(-50%,-50%) rotate(-8deg) scale(.94)}22%{transform:translate(-50%,-50%) rotate(-8deg) scale(1)}78%{opacity:1;transform:translate(-50%,-50%) rotate(-8deg) scale(1)}100%{opacity:0;transform:translate(-50%,-50%) rotate(-8deg) scale(1.04)}}
+.pz-msg.solved{padding:12px 14px;border:1px solid var(--seal);border-left-width:4px;background:color-mix(in srgb,var(--seal) 9%,var(--surface));font-size:14px;animation:pzMsg .35s ease-out}
+.pz-msg.solved b{font-family:var(--brush);font-weight:400;font-size:26px;vertical-align:-3px;margin-right:6px}
+@keyframes pzMsg{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pz-gonext{animation:pzNext 1.6s ease-in-out .8s 3}
+@keyframes pzNext{0%,100%{box-shadow:0 0 0 0 color-mix(in srgb,var(--seal) 0%,transparent)}50%{box-shadow:0 0 0 6px color-mix(in srgb,var(--seal) 25%,transparent)}}
+@media (prefers-reduced-motion:reduce){.pz-stamp,.pz-gonext,.pz-msg.solved,.bk-ov .pz-win line{animation:none}.bk-ov .pz-win line{stroke-dashoffset:0}.pz-stamp{display:none}}
+.bk-h h3 .bk-no{font-family:var(--mono);font-size:.8em;font-weight:600}

@@ -1,0 +1,17 @@
+{
+  "styles": [
+    "fonts.css",
+    "base.css",
+    "system.css",
+    "game.css",
+    "openings.css",
+    "pages.css",
+    "home.css",
+    "dingshi.css",
+    "puzzles.css",
+    "opponents.css",
+    "story.css",
+    "sections.css",
+    "shell.css"
+  ]
+}

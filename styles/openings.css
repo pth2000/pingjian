@@ -1,0 +1,78 @@
+/* ---- 开局谱 ---- */
+.mast-r{display:flex;align-items:center;gap:14px}
+.ev{font-style:normal;font-size:11px;line-height:1.5;padding:0 6px;border-radius:3px;border:1px solid var(--rule);white-space:nowrap;color:var(--muted)}
+.ev.b3{background:var(--ink);border-color:var(--ink);color:var(--ground)}
+.ev.b2{border-color:var(--ink);color:var(--ink)}
+.ev.b1{border-color:var(--muted);color:var(--ink)}
+.ev.e{border-style:dashed}
+.ev.w1,.ev.w3{background:var(--stone-w);color:#1B201D;border-color:var(--stone-edge)}
+.ev.w3{box-shadow:inset 0 0 0 1px #1B201D}
+.bk-detail{overflow-y:auto;padding:14px 18px 18px}
+.bk-h{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;margin-bottom:12px}
+.bk-h h3{margin:0;font-size:20px;letter-spacing:.08em;display:flex;align-items:baseline;gap:8px}
+.bk-h h3 small{font-size:12px;color:var(--muted);letter-spacing:.02em;font-weight:400}
+.bk-h .ev{font-size:12px;padding:1px 8px}
+.bk-main{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:16px;align-items:start}
+.bk-board{max-width:520px}
+.bk-svg{display:block;width:100%;height:auto;cursor:pointer;touch-action:manipulation}
+.bk-svg .bd{fill:#DCB575}
+.bk-svg .gl{stroke:rgba(60,40,15,.62);stroke-width:1;fill:none}
+.bk-svg .star{fill:rgba(60,40,15,.75)}
+.bk-svg .co{font-size:9px;fill:rgba(60,40,15,.75);text-anchor:middle;font-family:var(--mono)}
+.bk-svg .sb{fill:#1C1D1C}
+.bk-svg .sw2{fill:#F4F3EC;stroke:rgba(20,24,22,.35);stroke-width:1}
+.bk-svg .last{stroke:var(--seal);stroke-width:2.2}
+.bk-svg .n{font-size:11px;text-anchor:middle;font-family:var(--mono);font-weight:600;pointer-events:none}
+.bk-svg .on-b{fill:#F4F3EC}.bk-svg .on-w{fill:#1C1D1C}
+.bk-svg .fb{stroke:#C62F24;stroke-width:2;stroke-linecap:round}
+.bk-svg .cand circle{fill:rgba(31,111,92,.16);stroke:#1F6F5C;stroke-width:1.6;stroke-dasharray:3 2}
+.bk-svg .cand text{fill:#1F6F5C;font-size:12px;font-weight:700;text-anchor:middle;font-family:var(--mono)}
+.bk-svg .cand:hover circle{fill:rgba(31,111,92,.32)}
+.bk-svg .cand.agree circle{stroke:#B3261E;stroke-dasharray:none;fill:rgba(179,38,30,.14)}
+.bk-svg .cand.agree text{fill:#B3261E}
+.bk-cands small.agree{color:var(--seal)}
+.bk-side{display:flex;flex-direction:column;gap:10px;font-size:13px}
+.bk-side p{margin:0;line-height:1.7}
+.bk-wait{color:var(--muted)}
+.bk-win{font-weight:600}
+.bk-cands{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.bk-cands button{display:flex;align-items:center;gap:6px;padding:5px 9px;font-family:var(--mono);font-size:13px}
+.bk-cands button span{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;border:1.5px dashed var(--focus);color:var(--focus);font-size:11px;font-weight:700}
+.bk-cands button small{font-family:var(--cjk);color:var(--muted);font-size:11.5px}
+.bk-cands .src{flex-basis:100%;color:var(--muted);font-size:11.5px}
+.bk-go{display:flex;flex-direction:column;gap:6px;padding-top:10px;border-top:1px solid var(--rule)}
+.bk-go button{font-size:13.5px}
+.bk-go .linkish{flex-basis:auto!important;text-align:left}
+/* 定式树 */
+.bk-cur{padding:7px 10px;border-radius:6px;background:var(--seal-soft);border-left:3px solid var(--seal)}
+.bk-cur b{margin-right:6px}
+.bk-cur em{font-style:normal;font-weight:600;margin-left:4px}
+.bk-cur a{margin-left:8px;font-size:11.5px;color:var(--muted)}
+.tg{font-style:normal;font-size:10.5px;padding:0 5px;margin-right:5px;border-radius:3px;background:var(--seal);color:var(--seal-ink);vertical-align:1px}
+.bk-kids{display:flex;flex-direction:column;gap:4px}
+.bk-kids .kh{font-size:12px;color:var(--seal);letter-spacing:.06em;font-weight:600}
+.bk-kids button{display:flex;align-items:baseline;gap:6px;text-align:left;padding:5px 9px;font-size:12.5px;border-color:rgba(179,38,30,.35)}
+.bk-kids button b{font-family:var(--mono);font-size:13px;min-width:30px}
+.bk-kids button span{color:var(--muted);flex:1}
+.bk-kids button.weak{opacity:.72;border-style:dashed}
+.bk-off{color:var(--muted);font-size:12.5px;padding:6px 10px;border:1px dashed var(--rule);border-radius:6px}
+.bk-side a{color:var(--muted)}
+.bk-cands .kh,.bk-kids .kh{flex-basis:100%;display:flex;justify-content:space-between;align-items:baseline;font-size:12px;letter-spacing:.06em;font-weight:600}
+.bk-cands .kh{color:var(--focus)}
+.bk-cands .kh small{font-weight:400;letter-spacing:0;color:var(--muted);font-variant-numeric:tabular-nums}
+.about p{margin:0 0 8px;font-size:12.5px;line-height:1.7;color:var(--muted)}
+.about a{color:inherit}
+/* 状态栏的开局小标签 */
+.status .st-txt{min-width:0;flex:1}
+.op-chip{display:inline-block;margin-top:5px;font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--seal);color:var(--seal);background:var(--seal-soft);white-space:nowrap;letter-spacing:.02em}
+.op-chip.out{border-color:var(--rule);color:var(--muted);background:none}
+@media (max-width:820px),(max-height:560px){.op-chip{font-size:10.5px;padding:2px 7px}}
+/* 开局谱：AI 开局库 */
+.tg.ai{background:#2563A0}
+.bk-kids button small{font-family:var(--mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.bk-cur .aiev{display:block;margin-top:2px;font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bk-pr{margin:0 0 4px;font-size:12.5px;color:var(--seal);display:flex;justify-content:space-between;align-items:baseline}
+.bk-cur p{margin:0}
+.bk-long{margin:6px 0 0;font-size:12px;line-height:1.7;color:var(--ink)}
+details.bk-long summary{cursor:pointer;color:var(--seal);font-size:12px}
+details.bk-long p{margin:4px 0 0;max-height:220px;overflow-y:auto}

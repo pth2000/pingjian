@@ -1,0 +1,9 @@
+node_modules/
+dist/
+release/
+tests/out/
+.DS_Store
+__pycache__/
+
+# 在项目根目录跑测试时留下的截图
+/*.png
