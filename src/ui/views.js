@@ -58,11 +58,9 @@ export const oppRec = id => { let w = 0, l = 0; for (const d of DIFFS) { const r
 // 设置页：views/SetupView.vue；每次进来对手默认「随机」，其余跟着上一局
 // 人物页「和 TA 下一盘」：进设置页，对手先选好
 export function setupWith(id) { showView('setup'); setupSel.opp = id; }
-// 设置页分人机对弈、双人对弈两种。keep：从对弈页「更改设置」进来，对手也按这一局选好（随机的除外）
+// 设置页分人机对弈、双人对弈两种。keep：从主页「开始对局」或对弈页「更改设置」进来，对手也按上一局选好（随机的除外）
 export function setupFor(mode, keep) { showView('setup'); setupSel.mode = mode; if (keep && !S.randOpp) setupSel.opp = oppOf(S.level); }
 function renderSetup() { Object.assign(setupSel, { mode: 'ai', opp: 'rand', diff: diffOf(S.level), side: String(S.side || S.human), ruleSet: rulesetNow().id, first: S.opFirst === 'opp' ? 'opp' : 'me', nigiri: S.nigiri !== false }); }
-// 主页「开始对局」：按上一局的对手（或随机）、难度、执子、规则直接开
-export function quickStart() { renderSetup(); if (!S.randOpp) setupSel.opp = oppOf(S.level); return startAI(); }
 export async function startAI() {
   if (inProgress() && !(await ask({ title: '开始新的一局？', text: RESET_TXT, ok: '开新局' }))) return;
   const o = setupSel.opp, df = setupSel.diff;

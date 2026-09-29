@@ -5,7 +5,7 @@ import { computed } from 'vue';
 import { ui } from '../stores/ui.js';
 import MiniBoard from '../components/MiniBoard.vue';
 import Avatar from '../components/Avatar.vue';
-import { go, oppRec, quickStart } from '../ui/views.js';
+import { go, setupFor } from '../ui/views.js';
 import { inProgress } from '../ui/settings.js';
 import { PVP, myTurn, toMove } from '../ui/sound.js';
 import { DIFF_NAME, HIST, LEVELS, OPP, OPP_COL, REC, S, STATS, diffOf, oppOf } from '../ui/state.js';
@@ -20,8 +20,7 @@ import { ACH, ACHS } from '../features/achievements.js';
 import { PROFILE } from '../core/profile.js';
 import { ST, playerName, stageName } from '../story/story.js';
 import { ArrowRight, BookOpen, Crosshair, Users } from 'lucide-vue-next';
-import { rulesetNow } from '../game/rulesets.js';
-import { SWAP_OPENS } from '../game/rulesets.js';
+import { rulesetLabel } from '../game/rulesets.js';
 
 const m = computed(() => {
   if (!ui.booted) return null;
@@ -29,7 +28,7 @@ const m = computed(() => {
   const h = new Date().getHours(), hi = h < 5 ? '夜深了' : h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好';
   const name = PROFILE.cur ? playerName() : '';
 
-  // 对局：有没下完的就继续，否则「再来一盘」（上次的对手和难度）
+  // 对局：有没下完的就继续，否则「再来一盘」（开始对局进设置页）
   let play;
   if (inProgress()) {
     const pvp = PVP(), o = openingOf(S.moves), id = oppOf(S.level);
@@ -38,12 +37,19 @@ const m = computed(() => {
       title: pvp ? '双人对弈' : `对阵${OPP[id].name}`, diff: pvp ? '' : DIFF_NAME[diffOf(S.level)],
       meta: [`第 ${S.moves.length} 手`, o ? opLabel(o) : '', S.practice ? '开局练习' : '', turn].filter(Boolean) };
   } else {
-    const id = oppOf(S.level), rand = !!S.randOpp, r = oppRec(id), played = HIST.some(x => x.lv && x.lv !== 'pvp');
-    const last = HIST.length ? HIST[HIST.length - 1] : null;      // 右边的小棋盘：上一盘的终局；还没下过就摆一局花月
-    play = { cont: false, rand, id: rand ? 'rand' : id, moves: last && Array.isArray(last.m) && last.m.length ? last.m.slice() : [112, 113, 127, 111, 96, 128, 98, 126, 142],
-      title: played ? '再来一盘' : '开一局', name: rand ? '随机对手' : OPP[id].name, tag: rand ? '每局换人' : OPP[id].tag,
-      diff: DIFF_NAME[diffOf(S.level)], side: SWAP_OPENS.has(S.openRule) ? (S.opFirst === 'opp' ? '对手先摆' : '我先摆') : (S.side || S.human) === 1 ? '执黑先行' : '执白后行', rule: rulesetNow().short,
-      rec: !rand && r.w + r.l ? `${r.w} 胜 ${r.l} 负` : '' };
+    // 对手、难度这些到设置页再选；这里说一说右边小棋盘上的上一局，还没下过（或棋谱清空了）就摆一局花月、列出各位对手
+    const played = HIST.some(x => x.lv && x.lv !== 'pvp');
+    const x = HIST.length ? HIST[HIST.length - 1] : null, hasM = !!(x && Array.isArray(x.m) && x.m.length);
+    play = { cont: false, title: played ? '再来一盘' : '开一局', moves: hasM ? x.m.slice() : [112, 113, 127, 111, 96, 128, 98, 126, 142], last: null };
+    const pvp = hasM && x.lv === 'pvp', o = hasM && !pvp ? OPP[oppOf(x.lv)] : null;
+    if (pvp || o) {
+      const days = Math.round((new Date().setHours(0, 0, 0, 0) - new Date(x.t).setHours(0, 0, 0, 0)) / 864e5), d = new Date(x.t);
+      play.last = { id: o ? oppOf(x.lv) : '', diff: o ? DIFF_NAME[diffOf(x.lv)] : '',
+        head: pvp ? `双人对弈 · ${PVP_RES[x.r] || '和棋'}` : (AI_RES[x.r] || AI_RES.d)(o.name),
+        meta: [!pvp && (x.h === 1 ? '执黑' : '执白'), x.rule && rulesetLabel(x.rule, x.or), `${x.n || x.m.length} 手`,
+          x.rs && (pvp ? (x.rs === 1 ? '黑方认输' : '白方认输') : x.rs === x.h ? '认输' : '对手认输'),
+          days === 0 ? '今天' : days === 1 ? '昨天' : `${d.getMonth() + 1}月${d.getDate()}日`].filter(Boolean).join(' · ') };
+    }
   }
 
   // 杀法：第一道还没解开的题
@@ -92,6 +98,8 @@ const m = computed(() => {
   };
 });
 const RT = { w: '胜', l: '负', d: '和' };
+const AI_RES = { w: n => `战胜${n}`, l: n => `负于${n}`, d: n => `与${n}和棋` };
+const PVP_RES = { b: '黑方胜', wh: '白方胜', d: '和棋' };
 </script>
 
 <template>
@@ -106,20 +114,24 @@ const RT = { w: '胜', l: '负', d: '和' };
         <!-- 对局 -->
         <article class="card hm-play" :class="{ cont: m.play.cont }">
           <div class="hm-play-t">
-            <p class="eyebrow">{{ m.play.cont ? '上次的对局还没下完' : '人机对弈' }}</p>
+            <p class="eyebrow">{{ m.play.cont ? '上次的对局还没下完' : m.play.last ? '上一局' : '人机对弈' }}</p>
             <h3>{{ m.play.cont ? '继续对局' : m.play.title }}</h3>
             <div v-if="m.play.cont" class="hm-opp">
               <Avatar v-if="m.play.id" :id="m.play.id" :size="52"/><span v-else class="hm-pvp" aria-hidden="true"><i class="b"></i><i class="w"></i></span>
               <div><b>{{ m.play.title }}</b><small>{{ [m.play.diff, ...m.play.meta].filter(Boolean).join(' · ') }}</small></div>
             </div>
-            <div v-else class="hm-opp">
-              <Avatar :id="m.play.id" :size="52"/>
-              <div><b>{{ m.play.name }}<span class="chip">{{ m.play.diff }}</span></b><small>{{ [m.play.tag, m.play.side, m.play.rule, m.play.rec].filter(Boolean).join(' · ') }}</small></div>
+            <div v-else-if="m.play.last" class="hm-opp" id="hmLast">
+              <Avatar v-if="m.play.last.id" :id="m.play.last.id" :size="52"/><span v-else class="hm-pvp" aria-hidden="true"><i class="b"></i><i class="w"></i></span>
+              <div><b>{{ m.play.last.head }}<span v-if="m.play.last.diff" class="chip">{{ m.play.last.diff }}</span></b><small>{{ m.play.last.meta }}</small></div>
+            </div>
+            <div v-else class="hm-intro">
+              <p>挑一位对手，定好难度、规则和执子。</p>
+              <span class="hm-faces" aria-hidden="true"><Avatar v-for="o in OPPONENTS" :key="o.id" :id="o.id" :size="36"/></span>
             </div>
             <div class="hm-acts">
               <button v-if="m.play.cont" type="button" id="homeCont" class="btn accent lg" @click="go('game')">继续<ArrowRight aria-hidden="true"/></button>
-              <button v-else type="button" id="homeQuick" class="btn accent lg" @click="quickStart()">开始对局<ArrowRight aria-hidden="true"/></button>
-              <button type="button" class="btn" @click="go('setup')">{{ m.play.cont ? '开新局' : '换个对手' }}</button>
+              <button v-else type="button" id="homeStart" class="btn accent lg" @click="setupFor('ai', true)">开始对局<ArrowRight aria-hidden="true"/></button>
+              <button v-if="m.play.cont" type="button" class="btn" @click="go('setup')">开新局</button>
               <button type="button" class="btn ghost" @click="go('pvp')"><Users aria-hidden="true"/>双人对弈</button>
             </div>
           </div>

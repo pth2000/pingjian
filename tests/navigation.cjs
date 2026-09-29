@@ -27,5 +27,15 @@ const BASE = process.env.BASE_URL || 'http://localhost:4173/';
   ok(await p.evaluate(() => VIEW === 'notes' && document.body.dataset.view === 'notes'), '直接打开 #/notes');
   await p.goto(BASE + '#/nope'); await p.waitForTimeout(900);
   ok(await p.evaluate(() => VIEW === 'home'), '不认识的地址回主页');
+  // 主页「开始对局」：先进设置页，对手按上一局选好；不直接开局
+  await p.evaluate(() => { S.randOpp = false; S.level = 'laogui.' + diffOf(S.level); showView('home'); }); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => { const e = document.querySelector('#hmLast'), x = HIST[HIST.length - 1];
+    return !!e && e.textContent.includes(`${x.n} 手`) && e.textContent.includes('今天'); }), '主页：说明小棋盘上的上一局');
+  await p.evaluate(() => HIST.splice(0)); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => !document.querySelector('#hmLast') && document.querySelectorAll('.hm-intro .avatar').length === OPPONENTS.length), '主页：还没下过棋时列出各位对手');
+  const n0 = await p.evaluate(() => S.moves.length);
+  await p.click('#homeStart'); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => VIEW === 'setup' && setupSel.opp === 'laogui'), '主页开始对局：进设置页，对手按上一局选好');
+  ok(await p.evaluate(n => S.over && S.moves.length === n, n0), '主页开始对局：没有直接开新局');
   console.log(errs); await b.close(); if (errs.length) process.exitCode = 1;
 })();
